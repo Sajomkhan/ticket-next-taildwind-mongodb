@@ -5,6 +5,8 @@
 :root {
   --bg: #f8f9fa;
   --text: #343a40;
+  --bgLightt: #222;
+  --textLight: #ddd;
   --softBg: #f0f0f0;
   --softTextColor: #626262;
 }
@@ -35,10 +37,8 @@ a {
 }
 
 .light {
-  --bg: white;
-  --textColor: black;
-  --softBg: #f0f0f0;
-  --softTextColor: #626262;
+  --bgLightt: #222;
+  --textLight: #ddd;
 }
 
 .container {
