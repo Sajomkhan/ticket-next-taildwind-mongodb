@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import {
   collection,
   addDoc,
-  getDoc,
   query,
   onSnapshot,
   deleteDoc,
@@ -13,9 +12,9 @@ import { db } from "./firebase";
 
 export default function Home() {
   const [items, setItems] = useState([
-    { name: "Coffee", price: "6.55" },
-    { name: "Movie", price: "20.00" },
-    { name: "Candy", price: "4.55" },
+    // { name: "Coffee", price: "6.55" },
+    // { name: "Movie", price: "20.00" },
+    // { name: "Candy", price: "4.55" },
   ]);
   const [newItem, setNewItem] = useState({ name: "", price: "" });
   const [total, setTotal] = useState(0);
@@ -38,10 +37,18 @@ export default function Home() {
     }
   };
 
+  // Define a function to handle the key press event
+  function handleKeyPress(e) {
+    if (e.keyCode === 13) {
+      addItem();
+    }
+  }
+  document.addEventListener("keydown", handleKeyPress);
+
   // get items from database
   useEffect(() => {
     const q = query(collection(db, "items"));
-    const itemsData = onSnapshot(q, (querySnapshot) => {
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
       let itemsArr = [];
 
       querySnapshot.forEach((doc) => {
@@ -52,18 +59,21 @@ export default function Home() {
 
       // Read total from itemsArr
       const calculateTotal = () => {
-        const totalPrice = items.reduce(
+        const totalPrice = itemsArr.reduce(
           (sum, item) => sum + parseFloat(item.price),
           0
         );
         setTotal(totalPrice);
       };
       calculateTotal();
-      return () => itemsData();
+      return () => unsubscribe();
     });
   }, []);
 
-  // delete items from database
+  // Delete items from database
+  const deleteItem = async (id) => {
+    await deleteDoc(doc(db, "items", id));
+  };
 
   return (
     <main className="w-full min-h-screen flex flex-col items-center justify-center">
@@ -99,7 +109,12 @@ export default function Home() {
                 <span>{items.name}</span>
                 <span>{items.price}</span>
               </div>
-              <button className="bg-gray-900 hover:bg-gray-950 px-6">x</button>
+              <button
+                onClick={() => deleteItem(items.id)}
+                className="bg-gray-900 hover:bg-gray-950 px-6"
+              >
+                x
+              </button>
             </li>
           ))}
         </ul>

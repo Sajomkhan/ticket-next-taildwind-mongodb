@@ -33,6 +33,32 @@ input {
   color: var(--text);
 }
 
+.dark {
+  --bg: #0f172a;
+  --textColor: #ddd;
+  --softBg: #1f273a;
+  --softTextColor: #a6a6a6;
+}
+
+.light {
+  --textLight: #222;
+  --bgLightt: #ddd;
+}
+
+.container {
+  min-height: 100vh;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.wrapper {
+  max-width: 1536px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 80px;
+  padding-right: 80px;
+}
+
 @media screen and (max-width: 1536px) {
   .wrapper {
     max-width: 1366px;
