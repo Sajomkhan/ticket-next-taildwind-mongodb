@@ -8,7 +8,20 @@ export default function Home() {
     { name: "Movie", price: "20.00" },
     { name: "Candy", price: "4.55" },
   ]);
+  const [newItem, setNewItem] = useState({ name: "", price: "" });
   const [total, setTotal] = useState(0);
+
+  // add items from database
+  const addItem = (e) => {
+    e.preventDefault();
+    if (newItem.name !== "" && newItem.price !== "") {
+      setItems([...items, newItem]);
+    }
+  };
+
+  // get items from database
+
+  // delete items from database
 
   return (
     <main className="w-full min-h-screen flex flex-col items-center justify-center">
@@ -17,15 +30,23 @@ export default function Home() {
         <form className="grid grid-cols-6 gap-4 mb-12">
           <input
             className="col-span-3 p-2 border"
+            value={newItem.name}
+            onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
             type="text"
             placeholder="Enter Item"
           />
           <input
             className="col-span-2 p-2 border"
+            value={newItem.price}
+            onChange={(e) => setNewItem({ ...newItem, price: e.target.value })}
             type="text"
             placeholder="$"
           />
-          <button className="bg-gray-900 hover:bg-gray-950 p-2" type="submit">
+          <button
+            onClick={addItem}
+            className="bg-gray-900 hover:bg-gray-950 p-2"
+            type="submit"
+          >
             +
           </button>
         </form>
