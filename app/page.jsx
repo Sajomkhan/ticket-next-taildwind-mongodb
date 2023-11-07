@@ -1,6 +1,15 @@
 "use client";
-import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  collection,
+  addDoc,
+  getDoc,
+  query,
+  onSnapshot,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
+import { db } from "./firebase";
 
 export default function Home() {
   const [items, setItems] = useState([
@@ -12,14 +21,47 @@ export default function Home() {
   const [total, setTotal] = useState(0);
 
   // add items from database
-  const addItem = (e) => {
+  const addItem = async (e) => {
     e.preventDefault();
     if (newItem.name !== "" && newItem.price !== "") {
-      setItems([...items, newItem]);
+      // setItems([...items, newItem]);
+      try {
+        const docRef = await addDoc(collection(db, "items"), {
+          name: newItem.name,
+          price: newItem.price,
+        });
+        setNewItem({ name: "", price: "" });
+        console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
     }
   };
 
   // get items from database
+  useEffect(() => {
+    const q = query(collection(db, "items"));
+    const itemsData = onSnapshot(q, (querySnapshot) => {
+      let itemsArr = [];
+
+      querySnapshot.forEach((doc) => {
+        itemsArr.push({ ...doc.data(), id: doc.id });
+      });
+
+      itemsArr.length > 0 ? setItems([...items, ...itemsArr]) : "";
+
+      // Read total from itemsArr
+      const calculateTotal = () => {
+        const totalPrice = items.reduce(
+          (sum, item) => sum + parseFloat(item.price),
+          0
+        );
+        setTotal(totalPrice);
+      };
+      calculateTotal();
+      return () => itemsData();
+    });
+  }, []);
 
   // delete items from database
 
@@ -29,14 +71,14 @@ export default function Home() {
       <div className="bg-slate-800 p-8 rounded-md text-[var(--textLight)]">
         <form className="grid grid-cols-6 gap-4 mb-12">
           <input
-            className="col-span-3 p-2 border"
+            className="col-span-3 p-2 border text-[var(--text)"
             value={newItem.name}
             onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
             type="text"
             placeholder="Enter Item"
           />
           <input
-            className="col-span-2 p-2 border"
+            className="col-span-2 p-2 border text-[var(--text)"
             value={newItem.price}
             onChange={(e) => setNewItem({ ...newItem, price: e.target.value })}
             type="text"

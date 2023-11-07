@@ -4,7 +4,7 @@
 
 :root {
   --bg: #f8f9fa;
-  --text: #343a40;
+  --text: black;
   --bgLightt: #222;
   --textLight: #ddd;
   --softBg: #f0f0f0;
@@ -21,7 +21,7 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   background-color: var(--bg);
-  color: var(--textColor);
+  color: var(--text);
 }
 
 a {
@@ -29,30 +29,8 @@ a {
   text-decoration: none;
 }
 
-.dark {
-  --bg: #0f172a;
-  --textColor: #ddd;
-  --softBg: #1f273a;
-  --softTextColor: #a6a6a6;
-}
-
-.light {
-  --bgLightt: #222;
-  --textLight: #ddd;
-}
-
-.container {
-  min-height: 100vh;
-  background-color: var(--bg);
-  color: var(--textColor);
-}
-
-.wrapper {
-  max-width: 1536px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 80px;
-  padding-right: 80px;
+input {
+  color: var(--text);
 }
 
 @media screen and (max-width: 1536px) {
